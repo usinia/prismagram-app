@@ -9,10 +9,13 @@ import { persistCache } from "apollo-cache-persist";
 import ApolloClient from "apollo-boost";
 import { ApolloProvider } from "react-apollo-hooks";
 import options from "./apollo";
+import styles from "./styles";
+import { ThemeProvider } from "styled-components";
 
 export default function App() {
   const [loaded, setLoaded] = useState(false);
   const [client, setClient] = useState(null);
+  const [isLoggedIn, setIsLoggedIn] = useState(null);
   const preLoad = async () => {
     try {
       await Font.loadAsync({
@@ -28,6 +31,12 @@ export default function App() {
         cache,
         ...options
       });
+      const isLoggedIn = await AsyncStorage.getItem("isLoggedIn");
+      if (isLoggedIn) {
+        setIsLoggedIn(true);
+      } else {
+        setIsLoggedIn(false);
+      }
       setLoaded(true);
       setClient(client);
     } catch (e) {
@@ -39,11 +48,11 @@ export default function App() {
     preLoad();
   }, []);
 
-  return loaded && client ? (
+  return loaded && client && isLoggedIn !== null ? (
     <ApolloProvider client={client}>
-      <View>
-        <Text>Open up App.js to start working on your app!</Text>
-      </View>
+      <ThemeProvider theme={styles}>
+        <View>{isLoggedIn ? <Text>I'm In</Text> : <Text>I'm Out</Text>}</View>
+      </ThemeProvider>
     </ApolloProvider>
   ) : (
     <AppLoading />

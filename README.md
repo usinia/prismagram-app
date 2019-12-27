@@ -24,3 +24,9 @@ $ yarn add apollo-boost graphql react-apollo-hooks styled-components react-navig
 $ yarn add @expo/vector-icons
 $ yarn add expo-font expo-asset
 ```
+
+## #10.2 Preloading Cache
+
+```shell
+$ yarn add apollo-cache-persist apollo-cache-inmemory
+```
